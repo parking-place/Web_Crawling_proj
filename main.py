@@ -43,4 +43,4 @@ if __name__ == '__main__':
         chart_df.sort_values('rank', inplace=True)
         save_to_csv(site, chart_df)
 
-    print('time : {} sec'.format(end-start))
+    print('time : {:.2f} sec'.format(end-start))
