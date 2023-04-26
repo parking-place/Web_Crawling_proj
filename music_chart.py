@@ -38,9 +38,12 @@ if __name__ == '__main__':
     charts_dict = asyncio.run(main())
     end = time.time()
     
+    
+    
     for site, chart_dict in charts_dict.items():
         chart_df = pd.DataFrame(chart_dict)
         chart_df.sort_values('rank', inplace=True)
+        chart_df = chart_df[:100]
         save_to_csv(site, chart_df)
 
     print('time : {:.2f} sec'.format(end-start))
