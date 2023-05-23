@@ -176,12 +176,13 @@ def get_weather_data(browser, s_date, e_date):
     end_ = pd.Timestamp(e_date[0], e_date[1], e_date[2])
     date_2023_02 = pd.Timestamp(2023, 2, 1)
     if start_ < date_2023_02 and end_ > date_2023_02:
-        # 2월 데이터 크롤링
-        browser2 = get_browser()
-        weather_data2 = get_2_data(browser2)
-        # 전체 데이터에 2월 데이터 추가
-        for name in col_name:
-            weather_data[name] += weather_data2[name]
+        if '2023년 02월' not in starts:
+            # 2월 데이터 크롤링
+            browser2 = get_browser()
+            weather_data2 = get_2_data(browser2)
+            # 전체 데이터에 2월 데이터 추가
+            for name in col_name:
+                weather_data[name] += weather_data2[name]
     
     print_current('데이터 크롤링 완료')
     # 완성된 날씨 데이터 반환
