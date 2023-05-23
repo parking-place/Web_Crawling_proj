@@ -19,7 +19,7 @@ url = r'https://www.weatheri.co.kr/bygone/bygone01.php'
 # 드라이버 경로 설정
 driver_path = r'./browserdriver/msedgedriver112_64.exe'
 # column name 설정
-col_name = ['날짜', '평균기온', '최고기온', '최저기온', '강수량(mm)', '신적설(cm)', '평균풍속(m/s)', '운량(1/10)', '일조시간(hr)', '날씨']
+col_name = ['날짜', '평균기온', '최고기온', '최저기온', '강수량(mm)', '신적설(cm)', '평균풍속(m/s)', '평균습도(%)', '운량(1/10)', '일조시간(hr)', '날씨']
 
 
 s_date = (1967, 1, 1)
@@ -172,12 +172,16 @@ def get_weather_data(browser, s_date, e_date):
     
     # 웹드라이버 종료
     browser.quit()
-    # 2월 데이터 크롤링
-    browser2 = get_browser()
-    weather_data2 = get_2_data(browser2)
-    # 전체 데이터에 2월 데이터 추가
-    for name in col_name:
-        weather_data[name] += weather_data2[name]
+    start_ = pd.Timestamp(s_date[0], s_date[1], s_date[2])
+    end_ = pd.Timestamp(e_date[0], e_date[1], e_date[2])
+    date_2023_02 = pd.Timestamp(2023, 2, 1)
+    if start_ < date_2023_02 and end_ > date_2023_02:
+        # 2월 데이터 크롤링
+        browser2 = get_browser()
+        weather_data2 = get_2_data(browser2)
+        # 전체 데이터에 2월 데이터 추가
+        for name in col_name:
+            weather_data[name] += weather_data2[name]
     
     print_current('데이터 크롤링 완료')
     # 완성된 날씨 데이터 반환
@@ -219,6 +223,7 @@ def load_weather_df(filename = '19670101_20230430_weather.csv', file_path='./dat
     df.set_index('날짜', inplace=True)
     return df
 
+# 2월 데이터를 가져오는 함수
 def get_2_data(browser):
     # 시작 날짜, 종료 날짜 설정
     s_date = (2023, 2, 1)
